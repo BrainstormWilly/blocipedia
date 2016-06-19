@@ -17,6 +17,8 @@ Rails.application.routes.draw do
 
   resources :wikis
 
+  
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
