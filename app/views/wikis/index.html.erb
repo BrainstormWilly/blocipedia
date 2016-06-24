@@ -2,6 +2,37 @@
   <h1 class="text-center">Blocipedia: Wikis</h1>
 </div>
 
-<div class="jumbotron">
-  <h2>There will be Wikis</h2>
+<div class="panel panel-default">
+  <div class="panel-heading">My Public Wikis</div>
+  <div class="panel-body">
+    <% @wikis.each do |wiki| %>
+      <div style="margin-bottom: 10px" class="row">
+        <div class="col-md-10">
+          <%= link_to wiki, class: "btn btn-default btn-block"  do %>
+            <div class="row">
+              <div class="col-sm-11">
+                <span class="pull-left"><%= wiki.title %></span>
+              </div>
+              <div class="col-sm-1">
+                <span class="glyphicon glyphicon-chevron-right pull-right"></span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        <div class="col-md-1">
+          <%= link_to edit_wiki_path(wiki), class: "btn btn-success btn-block" do %>
+            <span class="glyphicon glyphicon-pencil"></span>
+          <% end %>
+        </div>
+        <div class="col-md-1">
+          <%= link_to wiki, method: :delete, class: "btn btn-danger btn-block" do %>
+            <span class="glyphicon glyphicon-remove"></span>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div style="margin-top: -10px" class="panel-footer">
+    <%= link_to "New Wiki", new_wiki_path, class: "btn btn-primary" %>
+  </div>
 </div>

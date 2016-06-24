@@ -15,6 +15,10 @@ Rails.application.routes.draw do
   end
   root 'welcome#index'
 
+  resources :wikis
+
+  
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
