@@ -23,6 +23,7 @@ class WikiPolicy < ApplicationPolicy
     user.admin? || user==wiki.user
   end
 
+
   class Scope < Scope
 
     attr_reader :user, :scope
@@ -35,8 +36,10 @@ class WikiPolicy < ApplicationPolicy
     def resolve
       if user.admin?
         scope.all
+      elsif user.member?
+        scope.where(private: false)
       else
-        scope.where(private: false) || scope.where(user: user)
+        scope.where("(private = 'f') or (user_id = #{@user.id})")
       end
     end
   end

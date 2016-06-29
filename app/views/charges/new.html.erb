@@ -1,0 +1,8 @@
+<div class="page-header">
+  <h1 class="text-center">Blocipedia: Switch to Premium</h1>
+</div>
+
+<%= form_tag charges_path do %>
+   <h4>Create private wikis and more for just $15!</h4>
+   <script class='stripe-button' src="https://checkout.stripe.com/checkout.js" data-key="<%= @stripe_btn_data[:key] %>" data-amount=<%= @stripe_btn_data[:amount] %> data-description="<%= @stripe_btn_data[:description] %>" ></script>
+ <% end %>

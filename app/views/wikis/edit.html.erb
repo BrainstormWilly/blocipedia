@@ -2,4 +2,6 @@
   <h1 class="text-center">Blocipedia: Wikis-Edit</h1>
 </div>
 
+<%= render partial: 'upgrade', locals: { user: current_user } %>
+
 <%= render partial: 'form', locals: { wiki: @wiki } %>

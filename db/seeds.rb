@@ -12,8 +12,12 @@ admin.confirm
 member = User.create(name: "YnoGuy", email: "bill@ynoguy.com", password: "123456")
 member.confirm
 
-20.times do
+rand(5..10).times do
   Wiki.create(title: Faker::Lorem.word, body: Faker::Lorem.paragraph, user: users.sample)
+end
+
+rand(2..5).times do
+  Wiki.create(title: Faker::Lorem.word, body: Faker::Lorem.paragraph, private:true, user: admin)
 end
 
 puts "Seeds Finished."

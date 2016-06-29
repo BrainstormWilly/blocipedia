@@ -12,36 +12,21 @@
 <div class="container">
 
   <nav class="navbar navbar-default">
-
-      <ul class="nav navbar-nav">
-        <li><%= link_to "Wikis", wikis_path %></li>
-      </ul>
-      <div style="padding-right:20px" class="navbar-right">
-        <p class="navbar-text">
-            <% if user_signed_in? %>
-                <%= current_user.name %> | <%= link_to "Sign Out", destroy_user_session_path, method: :delete %>
-            <% else %>
-               <%= link_to "Sign In", new_user_session_path %> |
-               <%= link_to "Sign Up", new_user_registration_path %>
-             <% end %>
-         </p>
-      </div>
-
-
-  </nav>
-  <!-- <div class="row">
-    <div class="pull-right">
-       <% if user_signed_in? %>
-        <div class="pull-right">
-         <%= current_user.name %> |
-         <%= link_to "Sign Out", destroy_user_session_path, method: :delete %>
-        </div>
-      <% else %>
-        <%= link_to "Sign In", new_user_session_path %> |
-        <%= link_to "Sign Up", new_user_registration_path %>
-      <% end %>
+    <ul class="nav navbar-nav">
+      <li><%= link_to "Wikis", wikis_path %></li>
+    </ul>
+    <div style="padding-right:20px" class="navbar-right">
+      <p class="navbar-text">
+          <% if user_signed_in? %>
+              <%= link_to current_user.name, user_path(current_user) %>
+               | <%= link_to "Sign Out", destroy_user_session_path, method: :delete %>
+          <% else %>
+             <%= link_to "Sign In", new_user_session_path %> |
+             <%= link_to "Sign Up", new_user_registration_path %>
+           <% end %>
+       </p>
     </div>
-  </div> -->
+  </nav>
 
   <div class="container row">
     <div class="flash">
