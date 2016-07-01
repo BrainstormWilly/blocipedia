@@ -1,6 +1,7 @@
 class WikisController < ApplicationController
 
   before_action :authenticate_user!
+  # before_action :validate_user
   # before_action :authorize_user, except: [:index, :show, :new, :create]
 
   def index
@@ -64,6 +65,7 @@ class WikisController < ApplicationController
   def wiki_params
     params.require(:wiki).permit(:title, :body, :private)
   end
+
 
   # def authorize_user
   #   wiki = Wiki.find(params[:id])

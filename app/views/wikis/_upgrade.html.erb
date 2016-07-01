@@ -1,0 +1,6 @@
+<% if user.member? %>
+  <div class="jumbotron">
+    <h3>Create your own private wikis for just $15 by upgrading to a premium account.</h3>
+    <%= link_to "Let's Do It!", new_charge_path, class: "btn btn-primary btn-lg" %>
+  </div>
+<% end %>

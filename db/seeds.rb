@@ -1,19 +1,26 @@
 require "random_data"
 
 5.times do
-  user = User.create(name: Faker::Name.name, email: Faker::Internet.email, password: RandomData.random_sentence)
-  user.confirm
+  user = User.new(name: Faker::Name.name, email: Faker::Internet.email, password: '123456', password_confirmation: '123456')
+  user.skip_confirmation!
+  user.save
 end
 users = User.all
 
-admin = User.create(name: "Willy", email: "brainstormwilly@gmail.com", password: "123456", role: "admin")
-admin.confirm
+admin = User.new(name: "Willy", email: "brainstormwilly@gmail.com", password: "123456", role: "admin", password_confirmation: '123456')
+admin.skip_confirmation!
+admin.save
 
-member = User.create(name: "YnoGuy", email: "bill@ynoguy.com", password: "123456")
-member.confirm
+member = User.new(name: "YnoGuy", email: "bill@ynoguy.com", password: "123456", password_confirmation: '123456')
+member.skip_confirmation!
+member.save
 
-20.times do
+rand(5..10).times do
   Wiki.create(title: Faker::Lorem.word, body: Faker::Lorem.paragraph, user: users.sample)
+end
+
+rand(2..5).times do
+  Wiki.create(title: Faker::Lorem.word, body: Faker::Lorem.paragraph, private:true, user: admin)
 end
 
 puts "Seeds Finished."
