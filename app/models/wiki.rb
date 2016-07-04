@@ -5,4 +5,11 @@ class Wiki < ActiveRecord::Base
   validates :body, length: {minimum: 20 }, presence: true
   validates :user, presence: true
 
+  def self.publicize_user_wikis(user)
+    self.where(user: user).each do |w|
+      w.private = false
+      w.save
+    end
+  end
+
 end

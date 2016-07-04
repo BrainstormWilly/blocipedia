@@ -12,11 +12,11 @@ class WikiPolicy < ApplicationPolicy
   end
 
   def update?
-    index?
+    show?
   end
 
   def edit?
-    index?
+    show?
   end
 
   def destroy?
@@ -38,7 +38,7 @@ class WikiPolicy < ApplicationPolicy
         scope.all
       elsif user.member?
         scope.where(private: false)
-      else
+      elsif user.premium?
         scope.where("(private = 'f') or (user_id = #{@user.id})")
       end
     end

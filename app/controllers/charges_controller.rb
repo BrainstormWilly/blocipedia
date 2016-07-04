@@ -13,14 +13,14 @@ class ChargesController < ApplicationController
   def create
    customer = Stripe::Customer.create(
      email: current_user.email,
-     card: params[:stripeToken]
+     card: stripe_params
    )
 
    # Where the real magic happens
    charge = Stripe::Charge.create(
      customer: customer.id, # Note -- this is NOT the user_id in your app
      amount: Amount.default,
-     description: "Blocipedia Premium Membership - #{current_user.email}",
+     description: "Blocipedia Premium Membership",
      currency: 'usd'
    )
 
@@ -40,6 +40,13 @@ class ChargesController < ApplicationController
      flash[:alert] = e.message
      redirect_to new_charge_path
 
+  end
+
+
+  private
+
+  def stripe_params
+    params.require(:stripeToken)
   end
 
 end
