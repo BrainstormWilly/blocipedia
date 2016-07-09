@@ -14,6 +14,9 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @user.assign_attributes(user_params)
     if @user.save
+      if @user.member?
+        Wiki.publicize_user_wikis(@user)
+      end
       flash[:notice] = 'User was updated successfully'
       redirect_to @user
     else

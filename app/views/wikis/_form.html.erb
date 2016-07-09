@@ -28,6 +28,9 @@
   <% end %>
 
   <div class="form-group">
+    <% if is_authorized_to_delete(wiki) %>
+      <%= link_to "Delete", wiki, method: :delete, class: 'btn btn-danger' %>
+    <% end %>
     <%= f.submit "Save", class: 'btn btn-success' %>
   </div>
 

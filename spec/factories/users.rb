@@ -1,10 +1,9 @@
 FactoryGirl.define do
-  pw = RandomData.random_sentence
 
   factory :user do
-    name RandomData.random_name
+    name Faker::Name.name
     sequence(:email){|n| "user#{n}@blocipedia.com" }
-    password pw
-    password_confirmation pw
+    password "123456"
+    password_confirmation "123456"
   end
 end

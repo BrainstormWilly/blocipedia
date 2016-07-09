@@ -8,19 +8,23 @@ class WikiPolicy < ApplicationPolicy
   end
 
   def show?
-    user.admin? || !wiki.private || user==wiki.user
+    user.admin? || !wiki.private || (user.premium? && user==wiki.user)
+  end
+
+  def create?
+    user.admin? || (!wiki.private && user==wiki.user) || (user.premium? && user==wiki.user)
   end
 
   def update?
-    index?
+    show?
   end
 
   def edit?
-    index?
+    show?
   end
 
   def destroy?
-    user.admin? || user==wiki.user
+    create?
   end
 
 
@@ -38,7 +42,7 @@ class WikiPolicy < ApplicationPolicy
         scope.all
       elsif user.member?
         scope.where(private: false)
-      else
+      elsif user.premium?
         scope.where("(private = 'f') or (user_id = #{@user.id})")
       end
     end
