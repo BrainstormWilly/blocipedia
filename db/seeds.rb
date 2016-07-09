@@ -16,11 +16,11 @@ member.skip_confirmation!
 member.save
 
 rand(5..10).times do
-  Wiki.create(title: Faker::Lorem.word, body: Faker::Lorem.paragraph, user: users.sample)
+  Wiki.create(title: Faker::Lorem.sentence, body: Faker::Lorem.paragraph, user: users.sample)
 end
 
 rand(2..5).times do
-  Wiki.create(title: Faker::Lorem.word, body: Faker::Lorem.paragraph, private:true, user: admin)
+  Wiki.create(title: Faker::Lorem.sentence, body: Faker::Lorem.paragraph, private:true, user: admin)
 end
 
 puts "Seeds Finished."

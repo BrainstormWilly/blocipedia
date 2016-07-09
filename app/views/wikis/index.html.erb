@@ -9,7 +9,7 @@
   <div class="panel-body">
     <% @wikis.each do |wiki| %>
       <div style="margin-bottom: 10px" class="row">
-        <div class="col-md-10">
+        <div class="col-md-11">
           <%= link_to wiki, class: "btn btn-default btn-block"  do %>
             <div class="row">
               <% if wiki.private? %>
@@ -36,11 +36,6 @@
         <div class="col-md-1">
           <%= link_to edit_wiki_path(wiki), class: "btn btn-success btn-block" do %>
             <span class="glyphicon glyphicon-pencil"></span>
-          <% end %>
-        </div>
-        <div class="col-md-1">
-          <%= link_to wiki, method: :delete, class: "btn btn-danger btn-block" do %>
-            <span class="glyphicon glyphicon-remove"></span>
           <% end %>
         </div>
       </div>

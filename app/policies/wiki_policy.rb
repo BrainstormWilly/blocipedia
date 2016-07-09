@@ -8,7 +8,11 @@ class WikiPolicy < ApplicationPolicy
   end
 
   def show?
-    user.admin? || !wiki.private || user==wiki.user
+    user.admin? || !wiki.private || (user.premium? && user==wiki.user)
+  end
+
+  def create?
+    user.admin? || (!wiki.private && user==wiki.user) || (user.premium? && user==wiki.user)
   end
 
   def update?
@@ -20,7 +24,7 @@ class WikiPolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.admin? || user==wiki.user
+    create?
   end
 
 
