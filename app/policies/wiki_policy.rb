@@ -8,7 +8,7 @@ class WikiPolicy < ApplicationPolicy
   end
 
   def show?
-    user.admin? || !wiki.private || (user.premium? && user==wiki.user)
+    user.admin? || !wiki.private || (user.premium? && user==wiki.user) || wiki.users.include?(user)
   end
 
   def create?
@@ -38,14 +38,26 @@ class WikiPolicy < ApplicationPolicy
     end
 
     def resolve
+      all_wikis = scope.all
+      wikis = []
       if user.admin?
-        scope.all
-      elsif user.member?
-        scope.where(private: false)
+        wikis = scope.all
       elsif user.premium?
-        scope.where("(private = 'f') or (user_id = #{@user.id})")
+        all_wikis.each do |wiki|
+          if !wiki.private? || wiki.user == user || wiki.users.include?(user)
+            wikis << wiki
+          end
+        end
+      else
+        all_wikis.each do |wiki|
+          if !wiki.private? || wiki.users.include?(user)
+            wikis << wiki
+          end
+        end
       end
+      wikis
     end
+
   end
 
 

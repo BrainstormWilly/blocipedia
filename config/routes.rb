@@ -13,7 +13,11 @@ Rails.application.routes.draw do
   end
   root 'welcome#index'
 
-  resources :wikis
+  resources :wikis do
+    get "collaborators" => "collaborators#index"
+    post "collaborator/:id" => "collaborators#create", as: 'add_collaborator'
+    delete "collaborator/:id" => "collaborators#destroy", as: 'delete_collaborator'
+  end
 
 
 
