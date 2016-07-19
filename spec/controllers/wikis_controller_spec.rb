@@ -743,6 +743,11 @@ RSpec.describe WikisController, type: :controller do
         expect(updated_wiki.title).to eq new_title
         expect(updated_wiki.body).to eq new_body
       end
+      it "updates private wiki to public and deletes collaborators" do
+        collab_user = create( :user )
+        collab = create(:collaborator, wiki: private_wiki, user: collab_user)
+        expect{put :update, id: private_wiki.id, wiki: {private: false}}.to change(Collaborator, :count).by(-1)
+      end
       it "private wiki redirects to the updated wiki" do
         new_title = RandomData.random_sentence
         new_body = RandomData.random_paragraph

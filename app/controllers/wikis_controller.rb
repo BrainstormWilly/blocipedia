@@ -40,6 +40,9 @@ class WikisController < ApplicationController
     @wiki.assign_attributes(wiki_params)
     authorize @wiki
     if @wiki.save
+      if !@wiki.private
+        Collaborator.publicized_wiki(@wiki)
+      end
       flash[:notice] = 'Wiki was updated successfully'
       redirect_to @wiki
     else
