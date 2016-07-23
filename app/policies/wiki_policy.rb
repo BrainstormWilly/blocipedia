@@ -7,6 +7,10 @@ class WikiPolicy < ApplicationPolicy
     @wiki = wiki
   end
 
+  def collaborators?
+    user.admin? || wiki.user == user
+  end
+
   def show?
     user.admin? || !wiki.private || (user.premium? && user==wiki.user) || wiki.users.include?(user)
   end

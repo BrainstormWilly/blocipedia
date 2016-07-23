@@ -53,9 +53,9 @@ RSpec.describe CollaboratorsController, type: :controller do
     end
 
     describe "GET index" do
-      it "does not show users" do
+      it "returns http redirect" do
         get :index, wiki_id: wiki.id
-        expect(assigns(:users).count).to eq 0
+        expect(response).to redirect_to(authenticated_root_path)
       end
     end
 
@@ -98,9 +98,9 @@ RSpec.describe CollaboratorsController, type: :controller do
     end
 
     describe "GET index" do
-      it "does not show users" do
+      it "returns http redirect" do
         get :index, wiki_id: wiki.id
-        expect(assigns(:users).count).to eq 0
+        expect(response).to redirect_to(authenticated_root_path)
       end
     end
 
@@ -140,9 +140,9 @@ RSpec.describe CollaboratorsController, type: :controller do
     end
 
     describe "GET index" do
-      it "shows users" do
+      it "returns http redirect" do
         get :index, wiki_id: wiki.id
-        expect(assigns(:users).count).to be > 0
+        expect(response).to redirect_to(authenticated_root_path)
       end
     end
 
@@ -186,9 +186,9 @@ RSpec.describe CollaboratorsController, type: :controller do
     end
 
     describe "GET index" do
-      it "shows users" do
+      it "returns http redirect" do
         get :index, wiki_id: wiki.id
-        expect(assigns(:users).count).to be > 0
+        expect(response).to redirect_to(authenticated_root_path)
       end
     end
 
@@ -235,6 +235,10 @@ RSpec.describe CollaboratorsController, type: :controller do
         get :index, wiki_id: wiki.id
         expect(assigns(:users).count).to be > 0
       end
+      it "renders collaborators index" do
+        get :index, wiki_id: wiki.id
+        expect(response).to render_template(:index)
+      end
     end
 
     describe "POST create" do
@@ -279,6 +283,10 @@ RSpec.describe CollaboratorsController, type: :controller do
       it "shows users" do
         get :index, wiki_id: wiki.id
         expect(assigns(:users).count).to be > 0
+      end
+      it "renders collaborators index" do
+        get :index, wiki_id: wiki.id
+        expect(response).to render_template(:index)
       end
     end
 

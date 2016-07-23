@@ -11,4 +11,7 @@ class Wiki < ActiveRecord::Base
     self.where(user: user).update_all(private: false)
   end
 
+  #after_save { Collaborator.publicized_wiki(self) if !private }
+  after_save { collaborators.destroy_all if !private }
+
 end
