@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
   has_many :wikis
+  has_many :collaborators, dependent: :destroy
+  #has_many :collab_wikis, through: :collaborators, foreign_key: :user_id
 
   before_save { self.email = email.downcase }
   after_initialize { self.role ||= :member }

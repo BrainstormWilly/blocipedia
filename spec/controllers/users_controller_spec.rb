@@ -159,10 +159,13 @@ RSpec.describe UsersController, type: :controller do
         expect( assigns(:user).role ).to eq "member"
       end
 
-      it "converts private wikis to public after downgrade" do
-        create(:wiki, title: "My Private Wiki", user: @user, private:true)
+      it "converts private wikis to public and deletes collaborators after downgrade" do
+        wiki = create(:wiki, title: "My Private Wiki", user: @user, private:true)
+        collab_user = create( :user )
+        collab = create( :collaborator, wiki: wiki, user: collab_user)
         put :update, id: @user.id, user: {name: @user.name, email: @user.email, role: "member"}
         expect( @user.wikis.last.private ).to be_falsey
+        expect( @user.wikis.last.collaborators.count ).to eq 0
       end
     end
 

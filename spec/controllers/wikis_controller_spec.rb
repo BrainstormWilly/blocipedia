@@ -54,7 +54,7 @@ RSpec.describe WikisController, type: :controller do
   end # end guest user context
 
 
-  context "member user doing CRUD on a wikis they don't own" do
+  context "member user doing CRUD on a wiki they don't own" do
 
     before do
       @user = build(:user)
@@ -180,9 +180,19 @@ RSpec.describe WikisController, type: :controller do
     end
 
     describe "DELETE destroy" do
+      it "does not delete the public wiki" do
+        delete :destroy, id: public_wiki.id
+        count = Wiki.where({id: public_wiki.id}).size
+        expect(count).to eq 1
+      end
       it "public wiki returns http redirect" do
         delete :destroy, id: public_wiki.id
         expect(response).to redirect_to authenticated_root_path
+      end
+      it "does not delete the private wiki" do
+        delete :destroy, id: private_wiki.id
+        count = Wiki.where({id: private_wiki.id}).size
+        expect(count).to eq 1
       end
       it "private wiki returns http redirect to index" do
         delete :destroy, id: private_wiki.id
@@ -337,6 +347,12 @@ RSpec.describe WikisController, type: :controller do
         expect(response).to redirect_to wikis_index_path
       end
 
+      it "does not delete the private wiki" do
+        delete :destroy, id: private_wiki.id
+        count = Wiki.where({id: private_wiki.id}).size
+        expect(count).to eq 1
+      end
+
       it "private wiki redirects to index" do
         delete :destroy, id: private_wiki.id
         expect(response).to redirect_to authenticated_root_path
@@ -344,6 +360,92 @@ RSpec.describe WikisController, type: :controller do
     end
 
   end # member user doing CRUD on wikis they own
+
+
+  context "member user doing CRUD on a wiki as collaborator" do
+
+    before do
+      @user = create(:user)
+      sign_in @user
+      @other_user = create(:user, role: "premium")
+      public_wiki.user = @other_user
+      public_wiki.save
+      private_wiki.user = @other_user
+      private_wiki.save
+      @collab = create(:collaborator, user:@user, wiki:private_wiki)
+    end
+
+    describe "GET index" do
+      it "returns http success" do
+        get :index
+        expect(assigns(:wikis).count).to eq 2
+      end
+    end
+
+    describe "GET show" do
+      it "private wiki returns http success" do
+        get :show, id: private_wiki.id
+        expect(response).to have_http_status(:success)
+      end
+      it "assigns wiki to be shown to @private_wiki" do
+        get :show, id: private_wiki.id
+        wiki_instance = assigns(:wiki)
+
+        expect(wiki_instance.id).to eq private_wiki.id
+        expect(wiki_instance.title).to eq private_wiki.title
+        expect(wiki_instance.body).to eq private_wiki.body
+      end
+    end
+
+    describe "GET edit" do
+      it "private wiki returns http success" do
+        get :edit, id: private_wiki.id
+        expect(response).to have_http_status(:success)
+      end
+      it "private wiki renders the #edit view" do
+        get :edit, id: private_wiki.id
+        expect(response).to render_template :edit
+      end
+      it "private wiki assigns wiki to be updated to @wiki" do
+        get :edit, id: private_wiki.id
+        wiki_instance = assigns(:wiki)
+        expect(wiki_instance.id).to eq private_wiki.id
+        expect(wiki_instance.title).to eq private_wiki.title
+        expect(wiki_instance.body).to eq private_wiki.body
+      end
+    end
+
+    describe "PUT update" do
+      it "updates private wiki with expected attributes" do
+        new_title = RandomData.random_sentence
+        new_body = RandomData.random_paragraph
+        put :update, id: private_wiki.id, wiki: {title: new_title, body: new_body}
+        updated_wiki = assigns(:wiki)
+        expect(updated_wiki.id).to eq private_wiki.id
+        expect(updated_wiki.title).to eq new_title
+        expect(updated_wiki.body).to eq new_body
+      end
+      it "private wiki redirects to the updated wiki" do
+        new_title = RandomData.random_sentence
+        new_body = RandomData.random_paragraph
+        put :update, id: private_wiki.id, wiki: {title: new_title, body: new_body}
+        expect(response).to redirect_to private_wiki
+      end
+    end
+
+    describe "DELETE destroy" do
+      it "does not delete private wiki" do
+        delete :destroy, id: private_wiki.id
+        count = Wiki.where(id: private_wiki.id).size
+        expect(count).to eq 1
+      end
+      it "private wiki returns http redirect to index" do
+        delete :destroy, id: private_wiki.id
+        expect(response).to redirect_to authenticated_root_path
+      end
+    end
+
+  end # member user doing CRUD on a wiki as collaborator
 
 
   context "premium user doing CRUD on a wikis they don't own" do
@@ -640,6 +742,11 @@ RSpec.describe WikisController, type: :controller do
         expect(updated_wiki.id).to eq private_wiki.id
         expect(updated_wiki.title).to eq new_title
         expect(updated_wiki.body).to eq new_body
+      end
+      it "updates private wiki to public and deletes collaborators" do
+        collab_user = create( :user )
+        collab = create(:collaborator, wiki: private_wiki, user: collab_user)
+        expect{put :update, id: private_wiki.id, wiki: {private: false}}.to change(Collaborator, :count).by(-1)
       end
       it "private wiki redirects to the updated wiki" do
         new_title = RandomData.random_sentence
