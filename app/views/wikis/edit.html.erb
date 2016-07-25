@@ -1,3 +1,4 @@
+
 <div class="page-header">
   <h1 class="text-center">Blocipedia: Wikis-Edit</h1>
 </div>
@@ -5,3 +6,13 @@
 <%= render partial: 'upgrade', locals: { user: current_user } %>
 
 <%= render partial: 'form', locals: { wiki: @wiki } %>
+
+<%= javascript_tag do %>
+  var opts = {
+    theme: {
+      preview: '/assets/preview/github',
+      editor: '/assets/editor/epic-light'
+    }
+  }
+  var editor = new EpicEditor(opts).load();
+<% end %>
