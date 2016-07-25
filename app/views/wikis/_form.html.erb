@@ -17,7 +17,9 @@
   <% end %>
   <%= form_group_tag(wiki.errors[:body]) do %>
     <%= f.label :body %>
-    <%= f.text_area :body, rows: 8, class: 'form-control', placeholder: "Enter wiki body" %>
+    <div id="epiceditor">
+      <%= f.text_area :body, rows: 8, class: 'form-control', placeholder: "Enter wiki body" %>
+    </div>
   <% end %>
 
   <% if is_authorized_for_private() %>
@@ -28,7 +30,8 @@
   <% end %>
 
   <div class="form-group">
-    <% if is_authorized_to_delete(wiki) %>
+    <% if is_authorized_to_control(wiki) %>
+
       <%= link_to "Delete", wiki, method: :delete, class: 'btn btn-danger' %>
     <% end %>
     <%= f.submit "Save", class: 'btn btn-success' %>

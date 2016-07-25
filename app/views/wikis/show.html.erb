@@ -11,8 +11,11 @@
   </div>
   <div class="panel-footer">
     <%= link_to "Edit", edit_wiki_path(@wiki), class: "btn btn-success" %>
-    <% if is_authorized_to_delete(@wiki) %>
+    <% if is_authorized_to_control(@wiki) %>
       <%= link_to "Delete", @wiki, method: :delete, class: "btn btn-danger" %>
+      <% if @wiki.private %>
+        <%= link_to pluralize(@wiki.collaborators.count, "Collaborator"), wiki_collaborators_path(@wiki.id), class: 'btn btn-default' %>
+      <% end %>
     <% end %>
     <span class="pull-right"><small>by <%= @wiki.user.name %></small></span>
   </div>

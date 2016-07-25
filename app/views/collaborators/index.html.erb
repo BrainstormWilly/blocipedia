@@ -1,0 +1,26 @@
+<div class="page-header">
+  <h1 class="text-center">Blocipedia: Wiki Collaborators</h1>
+</div>
+
+<div class="panel panel-default">
+  <div class="panel-heading">Wiki "<%= @wiki.title %>"</div>
+  <div class="panel-body">
+    <div class="list-group">
+      <% @users.each do |user| %>
+        <% if is_collaborator(@wiki, user) %>
+          <%= link_to wiki_delete_collaborator_path(id: user.id), method: :delete, class: 'list-group-item list-group-item-success' do %>
+            <span class="glyphicon glyphicon-minus pull-right"></span><%= user.name %>
+          <% end %>
+        <% else %>
+          <%= link_to wiki_add_collaborator_path(id: user.id), method: :post, class: 'list-group-item' do %>
+            <span class="glyphicon glyphicon-plus pull-right"></span><%= user.name %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+
+  </div>
+  <div class="panel-footer">
+    <%= link_to "Return to Wiki", wiki_path(@wiki), class: "btn btn-primary" %>
+  </div>
+</div>
