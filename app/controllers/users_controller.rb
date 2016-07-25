@@ -16,6 +16,7 @@ class UsersController < ApplicationController
     if @user.save
       if @user.member?
         Wiki.publicize_user_wikis(@user)
+        Collaborator.delete_user_wikis(@user)
       end
       flash[:notice] = 'User was updated successfully'
       redirect_to @user
