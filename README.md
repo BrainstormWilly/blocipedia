@@ -1,3 +1,6 @@
-## Blocipedia: A Wikipedia clone
+## Blocipedia: A Wikipedia clone ##
+A class project that mimic Wikipedia with multiple permissions
 
-Adding comment for test branch pull request
+# Software #
+* Ruby on Rails
+
